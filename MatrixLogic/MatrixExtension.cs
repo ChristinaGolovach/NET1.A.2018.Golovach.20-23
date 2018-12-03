@@ -5,6 +5,26 @@ namespace MatrixLogic
 {
     public static class MatrixExtension
     {
+        /// <summary>
+        /// Extension method for sum two matrices.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in matrix.
+        /// </typeparam>
+        /// <param name="matrix">
+        /// First matrix for sum.
+        /// </param>
+        /// <param name="otherMatrix">
+        /// Second matrix for sum.</param>
+        /// <returns>
+        /// A new matrix as result an elements sum of input matrices. 
+        /// </returns>
+        /// <exception cref="RuntimeBinderException">
+        /// <typeparamref name="T"/> is not implement operation '+'. 
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Input matrices are not equal by <see cref="Matrix{T}.MatrixOrder"/>
+        /// </exception>
         public static Matrix<T> Add<T>(this Matrix<T> matrix, Matrix<T> otherMatrix)
         {
             CheckMatrixOrder(matrix, otherMatrix);
@@ -42,7 +62,6 @@ namespace MatrixLogic
 
         private static SquareMatrix<T> Add<T>(DiagonalMatrix<T> otherMatrix, SquareMatrix<T> matrix, int matrixOrder)
             => Add<T>(matrix, otherMatrix, matrixOrder);
-
 
         private static SquareMatrix<T> Add<T>(SquareMatrix<T> matrix, SymmetricMatrix<T> otherMatrix, int matrixOrder)
         {
