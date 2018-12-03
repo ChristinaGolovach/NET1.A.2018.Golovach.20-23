@@ -92,6 +92,13 @@ namespace MatrixLogic
             ChengeValue.Invoke(this, matrixArgs);
         }
 
+        protected void ChangeValueInMatrix(int rowIndex, int columnIndex, string message)
+        {
+            string eventMessage = $"The value in row index {rowIndex} and {columnIndex}  - {message}.";
+            MatrixArgs matrixArgs = new Matrix<T>.MatrixArgs(eventMessage);
+            OnChangeValue(matrixArgs);
+        }
+
         private void InitializeMatrix(T[,] elements)
         {
             int rowCount = elements.GetLength(firstDemension);

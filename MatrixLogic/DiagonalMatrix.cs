@@ -39,9 +39,15 @@ namespace MatrixLogic
 
         protected override void SetValue(int rowIndex, int columnIndex, T value)
         {
-            if (rowIndex == columnIndex)
+            if (rowIndex != columnIndex)
+            {
+                throw new ArgumentException($"You can not change value outside the main diagonal.");
+            }
+            else
             {
                 elements[rowIndex, columnIndex] = value;
+
+                ChangeValueInMatrix(rowIndex, columnIndex, $"was changed to a new value {value}");
             }
         }
     }

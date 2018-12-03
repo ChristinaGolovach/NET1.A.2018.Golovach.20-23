@@ -45,6 +45,8 @@ namespace MatrixLogic
                 elements[rowIndex, columnIndex] = value;
                 elements[columnIndex, rowIndex] = value;
             }
+
+            ChangeValueInMatrix(rowIndex, columnIndex, $"was changed to a new value {value} and in row index {columnIndex}  column index {rowIndex} too.");
         }
     }
 }

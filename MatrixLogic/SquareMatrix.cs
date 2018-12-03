@@ -24,6 +24,8 @@ namespace MatrixLogic
         protected override void SetValue(int rowIndex, int columnIndex, T value)
         {            
             elements[rowIndex, columnIndex] = value;
+
+            ChangeValueInMatrix(rowIndex, columnIndex, $"was changed to a new value {value}");
         }
     }
 }
