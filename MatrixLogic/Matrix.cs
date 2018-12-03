@@ -19,6 +19,14 @@ namespace MatrixLogic
             internal protected set => matrixOrder = value;
         }
 
+        protected Matrix(int dimension)
+        {
+            if (dimension <= 0)
+            {
+                throw new ArgumentException($"The {nameof(dimension)} can not be less than one.");
+            }
+        }
+
         protected Matrix(T[,] elements)
         {   
             if (elements == null)

@@ -14,6 +14,11 @@ namespace MatrixLogic
 
         public SquareMatrix(T[,] elements, IComparer<T> comparer): base(elements,comparer) { }
 
+        public SquareMatrix(int dimension) : base(dimension)
+        {
+            elements = new T[dimension, dimension];
+        }
+
         protected override void InitializeMatrix(T[,] elements)
         {
             int dimension = elements.GetLength(0);

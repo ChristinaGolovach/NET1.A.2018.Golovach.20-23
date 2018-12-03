@@ -8,11 +8,13 @@ namespace MatrixLogic
 {
     public static class MatrixExtension
     {
-        //TODO подумать. или сделать visitor
-        public static dynamic Add<T>(this Matrix<T> matrix, Matrix<T> otherMatrix)
-            => Add<T>((dynamic)matrix, (dynamic)otherMatrix);
+        public static Matrix<T> Add<T>(this Matrix<T> matrix, Matrix<T> otherMatrix)
+        {
+            CheckMatrixOrder(matrix, otherMatrix);
 
-        //TODO подумать. в рез-те сложеня может выйти симметричная/диогональная - делать потом проверку элементов и фабрику? 
+            return Add<T>((dynamic)matrix, (dynamic)otherMatrix);
+        }
+             
         private static SquareMatrix<T> Add<T>(SquareMatrix<T> matrix, SquareMatrix<T> squareMatrix)
         {
             throw new NotImplementedException();
@@ -24,6 +26,14 @@ namespace MatrixLogic
         }
 
         //TODO и т.д.
-        //private static  
+        //private static 
+        
+        private static void CheckMatrixOrder<T>(Matrix<T> matrix, Matrix<T> otherMatrix)
+        {
+            if (matrix.MatrixOrder != otherMatrix.MatrixOrder)
+            {
+                throw new ArgumentException($"Dimensions of {nameof(matrix)} and {nameof(otherMatrix)} are not equal.");
+            }
+        }
     }
 }
