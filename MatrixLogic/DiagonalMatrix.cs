@@ -14,6 +14,11 @@ namespace MatrixLogic
 
         public DiagonalMatrix(T[,] elements, IComparer<T> comparer): base(elements,comparer) { }
 
+        public DiagonalMatrix(int dimension) : base(dimension)
+        {
+            elements = new T[dimension];
+        }
+
         protected override void InitializeMatrix(T[,] elements)
         {
             int dimension = elements.GetLength(0);            
@@ -40,6 +45,11 @@ namespace MatrixLogic
             }
         }
 
+        protected override T GetValue(int rowIndex, int columnIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void SetValue(int rowIndex, int columnIndex, T value)
         {
             if (rowIndex != columnIndex)
@@ -48,7 +58,7 @@ namespace MatrixLogic
             }
             else
             {
-                elements[rowIndex, columnIndex] = value;
+                elements[rowIndex] = value;
 
                 ChangeValueInMatrix(rowIndex, columnIndex, $"was changed to a new value {value}");
             }

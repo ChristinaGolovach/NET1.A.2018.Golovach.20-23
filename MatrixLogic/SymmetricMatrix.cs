@@ -9,9 +9,20 @@ namespace MatrixLogic
     public class SymmetricMatrix<T> : Matrix<T>
     {
         private T[][] elements;
+
         public SymmetricMatrix(T[,] elements) : base(elements) { }
 
         public SymmetricMatrix(T[,] elements, IComparer<T> comparer): base(elements,comparer) { }
+
+        public SymmetricMatrix(int dimension) : base(dimension)
+        {
+            elements = new T[dimension][];
+
+            for (int i = 0; i < dimension; i++)
+            {
+                elements[i] = new T[i + 1];
+            }
+        }
 
         protected override void InitializeMatrix(T[,] elements)
         {
