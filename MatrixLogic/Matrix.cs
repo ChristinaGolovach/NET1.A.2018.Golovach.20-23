@@ -25,6 +25,8 @@ namespace MatrixLogic
             {
                 throw new ArgumentException($"The {nameof(dimension)} can not be less than one.");
             }
+
+            MatrixOrder = dimension;
         }
 
         protected Matrix(T[,] elements)
@@ -41,12 +43,11 @@ namespace MatrixLogic
             {
                 throw new ArgumentNullException($"The {typeof(T)} must immplement IComparable interface.");
             }
-            
+            comparer = Comparer<T>.Default;
+
             VerifyMatrixElements(elements);
 
-            InitializeMatrix(elements);
-
-            comparer = Comparer<T>.Default;            
+            InitializeMatrix(elements);                        
         }
 
         protected Matrix(T[,] elements, IComparer<T> comparer)

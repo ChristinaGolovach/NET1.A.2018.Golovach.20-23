@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatrixLogic
 {
@@ -47,7 +44,12 @@ namespace MatrixLogic
 
         protected override T GetValue(int rowIndex, int columnIndex)
         {
-            throw new NotImplementedException();
+            if (rowIndex != columnIndex)
+            {
+                return default(T);
+            }
+
+            return elements[rowIndex];            
         }
 
         protected override void SetValue(int rowIndex, int columnIndex, T value)

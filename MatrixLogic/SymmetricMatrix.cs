@@ -52,7 +52,14 @@ namespace MatrixLogic
 
         protected override T GetValue(int rowIndex, int columnIndex)
         {
-            throw new NotImplementedException();
+            if (columnIndex >= elements[rowIndex].Length)
+            {
+                return elements[columnIndex][rowIndex];
+            }
+            else
+            {
+                return elements[rowIndex][columnIndex];
+            }
         }
 
         protected override void SetValue(int rowIndex, int columnIndex, T value)
@@ -88,8 +95,7 @@ namespace MatrixLogic
                 for (int j = 0; j < secondDemensionLength && isAllowed; j++)
                 {
                     if (comparer.Compare(elements[i, j], elements[j, i]) != 0)
-                    {
-                        
+                    {                        
                         isAllowed = false;
                     }
                 }
