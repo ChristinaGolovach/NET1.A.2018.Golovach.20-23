@@ -12,17 +12,14 @@ namespace MatrixLogic
         private const int secondDemension = 1;
 
         internal protected IComparer<T> comparer;
-        internal protected T[,] elements;
-        internal protected int matrixOrder;
+        private int matrixOrder;
 
         public event EventHandler<MatrixArgs> ChengeValue = delegate { };
 
-        //TODO подумать. порядок ведь наверное только у квад матриц. 
-        //тогда это св-во нужно не здесь, иначе этот класс не очень будет исп-ть для других видов матриц (прям, вектор).
-        // или (но как-то не очень) в описаніі класса указать что он базовый только для квадратных и название класса поменять.
         public int MatrixOrder
         {
             get => matrixOrder;
+            internal protected set => matrixOrder = value;
         }
 
         protected Matrix(T[,] elements)
@@ -35,12 +32,11 @@ namespace MatrixLogic
             {
                 throw new ArgumentNullException($"The {typeof(T)} must immplement IComparable<{typeof(T)}> interface.");
             }
-
             if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
             {
                 throw new ArgumentNullException($"The {typeof(T)} must immplement IComparable interface.");
             }
-
+            
             VerifyMatrixElements(elements);
 
             InitializeMatrix(elements);
@@ -48,7 +44,7 @@ namespace MatrixLogic
             comparer = Comparer<T>.Default;            
         }
 
-        public Matrix(T[,] elements, IComparer<T> comparer)
+        protected Matrix(T[,] elements, IComparer<T> comparer)
         {            
             if (elements == null)
             {
@@ -68,7 +64,7 @@ namespace MatrixLogic
             get
             {
                 CheckIndexesRange(rowIndex, columnIndex);
-                return elements[rowIndex, columnIndex];
+                return GetValue(rowIndex, columnIndex);
             }
 
             set
@@ -80,7 +76,11 @@ namespace MatrixLogic
 
         protected abstract void VerifyMatrixElements(T[,] elements);
 
+        protected abstract void InitializeMatrix(T[,] elements);
+
         protected abstract void SetValue(int rowIndex, int columnIndex, T value);
+
+        protected abstract T GetValue(int rowIndex, int columnIndex);
 
         protected void OnChangeValue(MatrixArgs matrixArgs)
         {
@@ -95,50 +95,38 @@ namespace MatrixLogic
         protected void ChangeValueInMatrix(int rowIndex, int columnIndex, string message)
         {
             string eventMessage = $"The value in row index {rowIndex} and {columnIndex}  - {message}.";
-            MatrixArgs matrixArgs = new Matrix<T>.MatrixArgs(eventMessage);
+            MatrixArgs matrixArgs = new MatrixArgs(eventMessage);
             OnChangeValue(matrixArgs);
         }
 
-        private void InitializeMatrix(T[,] elements)
+        protected bool IsAllowedForSquareMatrix(T[,] elements)
         {
-            int rowCount = elements.GetLength(firstDemension);
-            int columnCount = elements.GetLength(secondDemension);
-
-            this.elements = new T[rowCount, columnCount];
-
-            //TODO подумать. опять же,если этот класс использовать базовым для прямоугольной матрицы,
-            //только у квадратных матріц
-            // matrixOrder = length;
-
-            Array.Copy(elements, 0, this.elements, 0, elements.Length);            
-        }
+            return elements.GetLength(firstDemension) == elements.GetLength(secondDemension);     
+        }    
 
         private void CheckIndexesRange(int rowIndex, int columnIndex)
         {
-            int rowCount = elements.GetLength(firstDemension);
-            int columnCount = elements.GetLength(secondDemension);
-
-            if (rowIndex < 0 || rowIndex >= rowCount)
+            if (rowIndex < 0 || rowIndex >= MatrixOrder)
             {
                 throw new ArgumentOutOfRangeException($"The {nameof(rowIndex)} is out of range.");
             }
 
-            if (columnIndex < 0 || columnIndex >= columnCount)
+            if (columnIndex < 0 || columnIndex >= MatrixOrder)
             {
                 throw new ArgumentOutOfRangeException($"The {nameof(columnIndex)} is out of range.");
             }
-        }
+        }        
+    }
 
-        public class MatrixArgs : EventArgs
+    public class MatrixArgs : EventArgs
+    {
+        private string message;
+
+        public string Message { get => message; }
+
+        public MatrixArgs(string message)
         {
-            private string message;
-
-            public string Message { get => message; }
-
-            public MatrixArgs(string message)
-            {
-                this.message = message;
-            }
+            this.message = message;
         }
     }
 }
