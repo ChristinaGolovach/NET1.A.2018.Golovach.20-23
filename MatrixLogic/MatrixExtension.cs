@@ -33,12 +33,14 @@ namespace MatrixLogic
 
             try
             {
+                //TODO cast result of Add to Matrix<T>, than result will be Matrix but not specific Matrix??
                 result = Add<T>((dynamic)matrix, (dynamic)otherMatrix, matrix.MatrixOrder);
             }
             catch (RuntimeBinderException exception)
             {
-                throw;
+                throw new InvalidOperationException($"The type {typeof(T)} not support operator '+'", exception);
             }
+
             return result;
         }
 
@@ -55,13 +57,10 @@ namespace MatrixLogic
         {
             SquareMatrix<T> resultMatrix = new SquareMatrix<T>(matrixOrder);
 
-            SumElementsOfFullAndDiagonal(matrix, otherMatrix, resultMatrix, matrixOrder);
+            SumElementsOfFullMatrix(matrix, otherMatrix, resultMatrix, matrixOrder);
 
             return resultMatrix;
         }
-
-        private static SquareMatrix<T> Add<T>(DiagonalMatrix<T> otherMatrix, SquareMatrix<T> matrix, int matrixOrder)
-            => Add<T>(matrix, otherMatrix, matrixOrder);
 
         private static SquareMatrix<T> Add<T>(SquareMatrix<T> matrix, SymmetricMatrix<T> otherMatrix, int matrixOrder)
         {
@@ -71,6 +70,9 @@ namespace MatrixLogic
 
             return resultMatrix;
         }
+
+        private static SquareMatrix<T> Add<T>(DiagonalMatrix<T> otherMatrix, SquareMatrix<T> matrix, int matrixOrder)
+            => Add<T>(matrix, otherMatrix, matrixOrder);
 
         private static SquareMatrix<T> Add<T>(SymmetricMatrix<T> otherMatrix, SquareMatrix<T> matrix, int matrixOrder)
             => Add<T>(matrix, otherMatrix, matrixOrder);
@@ -102,27 +104,6 @@ namespace MatrixLogic
                 for (int j = 0; j < matrixOrder; j++)
                 {
                     resultMatrix[i, j] = firstMatrix[i, j] + secondMatrix[i, j];
-                }
-            }
-        }
-
-        private static void SumElementsOfFullAndDiagonal<T>(Matrix<T> matrix, Matrix<T> otherMatrix, Matrix<T> resultMatrix, int matrixOrder)
-        {
-            dynamic firstMatrix = (dynamic)matrix;
-            dynamic secondMatrix = (dynamic)otherMatrix;
-
-            for (int i = 0; i < matrixOrder; i++)
-            {
-                for (int j = 0; j < matrixOrder; j++)
-                {
-                    if (i == j)
-                    {
-                        resultMatrix[i, j] = firstMatrix[i, j] + secondMatrix[i, j];
-                    }
-                    else
-                    {
-                        resultMatrix[i, j] = firstMatrix[i, j];
-                    }
                 }
             }
         }
